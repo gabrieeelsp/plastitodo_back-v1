@@ -1,0 +1,102 @@
+docker-compose exec app php artisan make:model Category -m
+docker-compose exec app php artisan make:controller api/v1/CategoryController --api --model=Category
+
+//migration
+Schema::create('categories', function (Blueprint $table) {
+    $table->id();
+    $table->string('name');
+    $table->boolean('is_enable')->default(true);
+    $table->timestamps();
+});
+
+//model Category
+
+protected $fillable = [
+    'name', 'is_enable'
+];
+
+
+docker-compose exec app php artisan make:request v1/categories/CreateCategoryRequest
+//CreateCategoryRequest
+
+public function rules()
+    {
+        return [
+            'data' => 'required|array',
+            'data.type' => 'required|in:categories',
+            'data.attributes' => 'required|array',
+            'data.attributes.name' => 'required|max:30|string|unique:categories,name', 
+            'data.attributes.is_enable' => 'sometimes|boolean',            
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'data.attributes.name.required' => 'The Name field is required.',
+            'data.attributes.name.max' => 'The Name must not be greater than 30 characters.',
+            'data.attributes.name.unique' => 'The name has already been taken.',            
+        ];
+    }
+
+
+docker-compose exec app php artisan make:request v1/categories/UpdateCategoryRequest
+//UpdateCategoryRequest
+
+public function rules()
+    {
+        return [
+            'data' => 'required|array',
+            'data.id' => 'required|string',
+            'data.type' => 'required|in:categories',
+            'data.attributes' => 'required|array',
+            'data.attributes.name' => 'sometimes|max:30|required|string|unique:categories,name,'.$this->input('data.id'),
+            'data.attributes.is_enable' => 'sometimes|boolean',             
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'data.attributes.name.required' => 'The Name field is required.',
+            'data.attributes.name.max' => 'The Name must not be greater than 30 characters.',
+            'data.attributes.name.unique' => 'The name has already been taken.',            
+        ];
+    }
+
+//CategoryController
+use App\Http\Requests\v1\categories\CreateCategoryRequest;
+use App\Http\Requests\v1\categories\UpdateCategoryRequest;
+
+use App\Http\Resources\v1\CategoryResource;
+
+
+
+
+
+
+
+
+docker-compose exec app php artisan make:resource v1/CategoryResource
+//CategoryResource
+return [
+    'id' => $this->id,
+    'type' => 'category',
+    'attributes' => [
+        'name' => $this->name,
+        'is_enable' => boolval($this->is_enable),
+        'created_at' => $this->created_at->addHours(-3),
+        'updated_at' => $this->updated_at->addHours(-3),
+    ]
+];    
+//return parent::toArray($request);
+
+
+//routes/api.php
+use App\Http\Controllers\api\v1\CategoryController;
+
+Route::resource('categories', CategoryController::class)->only(['index', 'show']);
+
+(((Restricted)))
+Route::resource('categories', CategoryController::class)->only(['store', 'update']);
+
