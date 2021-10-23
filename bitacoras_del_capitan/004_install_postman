@@ -1,0 +1,20 @@
+https://www.postman.com/downloads/
+
+$ cd Downloads/
+$ tar -xzf Postman-linux-x64-7.32.0.tar.gz
+$ sudo mkdir -p /opt/apps/
+$ sudo mv Postman /opt/apps/
+$ sudo ln -s /opt/apps/Postman/Postman /usr/local/bin/postman
+$ postman
+
+####
+
+$ sudo vim /usr/share/applications/postman.desktop
+
+[Desktop Entry]
+Type=Application
+Name=Postman
+Icon=/opt/apps/Postman/app/resources/app/assets/icon.png
+Exec="/opt/apps/Postman/Postman"
+Comment=Postman Desktop App
+Categories=Development;Code;

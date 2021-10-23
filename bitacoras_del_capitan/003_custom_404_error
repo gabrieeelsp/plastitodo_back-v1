@@ -1,5 +1,8 @@
 //custom 404 error
 /app/Exceptions/Handler.php
+
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 public function register()
     {
         /* $this->reportable(function (Throwable $e) {
