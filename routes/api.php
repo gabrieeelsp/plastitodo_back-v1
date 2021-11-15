@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\api\v1\AuthController;
 use App\Http\Controllers\api\v1\CategoryController;
+use App\Http\Controllers\api\v1\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,7 @@ Route::prefix('v1')->group(static function () {
     Route::post('register', [AuthController::class, 'register']);
 
     Route::resource('categories', CategoryController::class)->only(['index', 'show']);
+    Route::resource('products', ProductController::class)->only(['index', 'show']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
@@ -33,4 +35,9 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
 
     Route::resource('categories', CategoryController::class)->only(['store', 'update']);
+
+    Route::patch('products/{id}/set_category', [ProductController::class, 'set_category']);
+    Route::resource('products', ProductController::class)->only(['store', 'update']);
+    
+
 });

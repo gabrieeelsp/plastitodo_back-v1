@@ -20,7 +20,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        //sleep(2);
+
         $searchText = trim($request->get('q'));
         $val = explode(' ', $searchText );
         $atr = [];
@@ -38,7 +38,6 @@ class CategoryController extends Controller
                     array_push($atr, ['is_enable', 0]);
                     break;
             }
-
 
         }
 
