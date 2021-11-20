@@ -26,6 +26,7 @@ class CreateProductsTable extends Migration
             $table->timestamps();
 
             $table->foreignId('category_id')->nullable()->constrained('categories')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('productgroup_id')->nullable()->constrained('productgroups')->onUpdate('cascade')->onDelete('cascade');
 
         });
     }

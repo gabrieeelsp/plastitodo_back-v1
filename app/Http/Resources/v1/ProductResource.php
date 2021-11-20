@@ -38,7 +38,22 @@ class ProductResource extends JsonResource
                             $this->category->name)
                         ]
                     ]
-                ]
+                ],
+                'productgroup' => $this->when(true, function () {
+                    return [
+                        'data' => [
+                            'id' => $this->productgroup_id,
+                            'type' => 'productgroups',
+                            'attributes' => [
+                                'name' => $this->when( $this->productgroup, 
+                                function () {
+                                    return $this->productgroup->name;
+                                }
+                                )
+                            ]
+                        ]
+                        ];
+                }),
             ]
         ];    
         //return parent::toArray($request);
